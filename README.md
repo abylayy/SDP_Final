@@ -29,6 +29,30 @@ The WeatherApp class serves as the main entry point for the application. Users c
 ### Observer Pattern
 
 The Observer pattern is employed to allow various components to receive updates about weather changes. The `WeatherStation` acts as the subject, while classes such as `CelsiusToFahrenheitAdapter` and `FahrenheitDecorator` act as observers.
+```
+import java.util.ArrayList;
+import java.util.List;
+
+class WeatherStation {
+    private List<IWeatherObserver> observers = new ArrayList<>();
+    public void addObserver(IWeatherObserver observer) {
+        observers.add(observer);
+    }
+    public void removeObserver(IWeatherObserver observer) {
+        observers.remove(observer);
+    }
+    public void updateWeather(String cityName, int temperatureCelsius, String weatherConditions) {
+        for (IWeatherObserver observer : observers) {
+            observer.update(cityName, temperatureCelsius, weatherConditions);
+        }
+    }
+    public void sendNotifications(String cityName, int temperatureCelsius, String weatherConditions) {
+        for (IWeatherObserver observer : observers) {
+            observer.update(cityName, temperatureCelsius, weatherConditions);
+        }
+    }
+}
+```
 
 ### Adapter Pattern
 
