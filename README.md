@@ -29,30 +29,6 @@ The WeatherApp class serves as the main entry point for the application. Users c
 ### Observer Pattern
 
 The Observer pattern is employed to allow various components to receive updates about weather changes. The `WeatherStation` acts as the subject, while classes such as `CelsiusToFahrenheitAdapter` and `FahrenheitDecorator` act as observers.
-```
-import java.util.ArrayList;
-import java.util.List;
-
-class WeatherStation {
-    private List<IWeatherObserver> observers = new ArrayList<>();
-    public void addObserver(IWeatherObserver observer) {
-        observers.add(observer);
-    }
-    public void removeObserver(IWeatherObserver observer) {
-        observers.remove(observer);
-    }
-    public void updateWeather(String cityName, int temperatureCelsius, String weatherConditions) {
-        for (IWeatherObserver observer : observers) {
-            observer.update(cityName, temperatureCelsius, weatherConditions);
-        }
-    }
-    public void sendNotifications(String cityName, int temperatureCelsius, String weatherConditions) {
-        for (IWeatherObserver observer : observers) {
-            observer.update(cityName, temperatureCelsius, weatherConditions);
-        }
-    }
-}
-```
 
 ### Adapter Pattern
 
@@ -80,37 +56,228 @@ The Factory pattern is used to create instances of the `WeatherNotifier` interfa
 
 The `WeatherObserver` interface defines the contract for objects that need to be notified about weather updates. It has a method `update(String cityName, int temperatureCelsius, String weatherConditions)`.
 
+```
+interface IWeatherObserver {
+    void update(String cityName, int temperatureCelsius, String weatherConditions);
+}
+```
+
 ### WeatherNotifier Interface
 
 The `WeatherNotifier` interface defines the contract for classes responsible for sending weather notifications. It has a method `sendNotification(String cityName, int temperatureCelsius, String weatherConditions)`.
+
+```
+interface IWeatherNotifier {
+    void sendNotification(String cityName, int temperatureCelsius, String weatherConditions);
+}
+```
 
 ### BaseWeatherNotifier Class
 
 The `BaseWeatherNotifier` class is a concrete implementation of the `WeatherNotifier` interface, providing basic notification functionality.
 
+```
+class BaseWeatherNotifier implements IWeatherNotifier {
+    @Override
+    public void sendNotification(String cityName, int temperatureCelsius, String weatherConditions) {
+        System.out.println("Weather notification sent for " + cityName +
+                ": Temperature (Celsius): " + temperatureCelsius + ", Conditions: " + weatherConditions);
+    }
+}
+```
+
 ### CelsiusToFahrenheitAdapter Class
 
 The `CelsiusToFahrenheitAdapter` class adapts the `WeatherObserver` interface to handle different update parameters. It converts Celsius to Fahrenheit and then calls the `update` method.
+
+```
+class CelsiusToFahrenheitAdapter implements IWeatherObserver {
+    private IWeatherObserver adaptee;
+
+    public CelsiusToFahrenheitAdapter(IWeatherObserver adaptee) {
+        this.adaptee = adaptee;
+    }
+
+    @Override
+    public void update(String cityName, int temperatureCelsius, String weatherConditions) {
+        double temperatureFahrenheit = celsiusToFahrenheit(temperatureCelsius);
+        adaptee.update(cityName, (int) temperatureFahrenheit, weatherConditions);
+    }
+
+    private double celsiusToFahrenheit(int temperatureCelsius) {
+        return (temperatureCelsius * 9.0 / 5.0) + 32;
+    }
+}
+```
 
 ### FahrenheitConversionStrategy Class
 
 The `FahrenheitConversionStrategy` class is a concrete implementation of the `TemperatureConversionStrategy` interface, providing a strategy for converting temperatures to Fahrenheit.
 
+```
+class FahrenheitConversionStrategy implements ITemperatureConversionStrategy {
+    @Override
+    public int convertTemperature(int temperatureCelsius) {
+        return (int) ((temperatureCelsius * 9.0 / 5.0) + 32);
+    }
+}
+```
+
 ### WeatherDataSingleton Class
 
 The `WeatherDataSingleton` class ensures a single instance for storing and accessing weather data. It is responsible for holding the current temperature in Celsius.
+
+```
+class WeatherDataSingleton {
+    private static WeatherDataSingleton instance;
+    private int temperatureCelsius;
+    private WeatherDataSingleton() {
+    }
+
+    public static synchronized WeatherDataSingleton getInstance() {
+        if (instance == null) {
+            instance = new WeatherDataSingleton();
+        }
+        return instance;
+    }
+    public int getTemperatureCelsius() {
+        return temperatureCelsius;
+    }
+    public void setTemperatureCelsius(int temperatureCelsius) {
+        this.temperatureCelsius = temperatureCelsius;
+    }
+}
+```
 
 ### WeatherStation Class
 
 The `WeatherStation` class acts as the subject in the Observer pattern. It manages a list of observers (`WeatherObserver` instances) and notifies them about weather updates. It has methods for updating weather and sending notifications.
 
+```
+import java.util.ArrayList;
+import java.util.List;
+
+class WeatherStation {
+    private List<IWeatherObserver> observers = new ArrayList<>();
+    public void addObserver(IWeatherObserver observer) {
+        observers.add(observer);
+    }
+    public void removeObserver(IWeatherObserver observer) {
+        observers.remove(observer);
+    }
+    public void updateWeather(String cityName, int temperatureCelsius, String weatherConditions) {
+        for (IWeatherObserver observer : observers) {
+            observer.update(cityName, temperatureCelsius, weatherConditions);
+        }
+    }
+    public void sendNotifications(String cityName, int temperatureCelsius, String weatherConditions) {
+        for (IWeatherObserver observer : observers) {
+            observer.update(cityName, temperatureCelsius, weatherConditions);
+        }
+    }
+}
+```
+
 ### CelsiusConversionStrategy Class
 
 The `CelsiusConversionStrategy` class is a concrete implementation of the `TemperatureConversionStrategy` interface, providing a strategy for converting temperatures to Celsius.
 
+```
+class CelsiusConversionStrategy implements ITemperatureConversionStrategy {
+    @Override
+    public int convertTemperature(int temperatureCelsius) {
+        return temperatureCelsius;
+    }
+}
+```
+
 ### WeatherApp Class
 
 The `WeatherApp` class contains the main method and implements the console application. It handles user input, updates weather, and sends notifications based on user choices.
+
+```
+import java.util.Scanner;
+
+public class WeatherApp {
+    public static void main(String[] args) {
+        WeatherDataSingleton weatherData = WeatherDataSingleton.getInstance();
+        WeatherStation weatherStation = new WeatherStation();
+        // Observer Pattern
+
+        IWeatherObserver consoleObserver = (cityName, temperature, weatherConditions) -> {
+            System.out.println("Current weather in " + cityName + ": Temperature (Celsius): " + temperature + ", Conditions: " + weatherConditions);
+        };
+        IWeatherObserver notificationObserver = (cityName, temperature, weatherConditions) -> {
+            IWeatherNotifier weatherNotifier = WeatherNotifierFactory.createWeatherNotifier();
+            weatherNotifier.sendNotification(cityName, temperature, weatherConditions);
+        };
+
+        IWeatherNotifier baseWeatherNotifier = new BaseWeatherNotifier();
+        IWeatherNotifier fahrenheitDecorator = new FahrenheitDecorator(baseWeatherNotifier, new FahrenheitConversionStrategy());
+
+        weatherStation.addObserver(new CelsiusToFahrenheitAdapter(consoleObserver));
+        weatherStation.addObserver(new CelsiusToFahrenheitAdapter(notificationObserver));
+
+        // Menu
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\nWeather Updating Administration");
+            System.out.println("1. Update Weather for Cities");
+            System.out.println("2. Send Notification about Weather Updates");
+            System.out.println("3. Convert Celsius to Fahrenheit");
+            System.out.println("4. Exit");
+
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter the city name: ");
+                    String cityName = scanner.next();
+                    System.out.print("Enter the temperature in Celsius: ");
+                    int temperature = scanner.nextInt();
+                    System.out.print("Enter weather conditions: ");
+                    String weatherConditions = scanner.next();
+                    weatherData.setTemperatureCelsius(temperature);
+                    System.out.println("Weather updated");
+                    break;
+
+                case 2:
+                    System.out.print("Enter the city name: ");
+                    cityName = scanner.next();
+                    System.out.print("Enter the temperature in Celsius: ");
+                    temperature = scanner.nextInt();
+                    System.out.print("Enter weather conditions: ");
+                    weatherConditions = scanner.next();
+
+                    // Use FahrenheitDecorator to fahrenheit conversion
+                    IWeatherNotifier weatherNotifier = new FahrenheitDecorator(baseWeatherNotifier, new FahrenheitConversionStrategy());
+                    weatherNotifier.sendNotification(cityName, temperature, weatherConditions);
+                    break;
+
+
+                case 3:
+                    System.out.print("Enter the temperature in Celsius: ");
+                    int celsiusTemperature = scanner.nextInt();
+                    ITemperatureConversionStrategy conversionStrategy = new FahrenheitConversionStrategy();
+                    int convertedTemperature = conversionStrategy.convertTemperature(celsiusTemperature);
+                    System.out.println("Temperature in Fahrenheit: " + convertedTemperature);
+                    break;
+
+                case 4:
+                    System.out.println("Exiting Weather App.");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+
+        } while (choice != 4);
+    }
+}
+```
 
 ### UML Diagram
 
