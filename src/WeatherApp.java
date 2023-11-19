@@ -4,13 +4,11 @@ public class WeatherApp {
     public static void main(String[] args) {
         WeatherDataSingleton weatherData = WeatherDataSingleton.getInstance();
         WeatherStation weatherStation = new WeatherStation();
-
         // Observer Pattern
-        IWeatherObserver consoleObserver = (cityName, temperature, weatherConditions) -> {
-            System.out.println("Current weather in " + cityName +
-                    ": Temperature (Celsius): " + temperature + ", Conditions: " + weatherConditions);
-        };
 
+        IWeatherObserver consoleObserver = (cityName, temperature, weatherConditions) -> {
+            System.out.println("Current weather in " + cityName + ": Temperature (Celsius): " + temperature + ", Conditions: " + weatherConditions);
+        };
         IWeatherObserver notificationObserver = (cityName, temperature, weatherConditions) -> {
             IWeatherNotifier weatherNotifier = WeatherNotifierFactory.createWeatherNotifier();
             weatherNotifier.sendNotification(cityName, temperature, weatherConditions);
@@ -56,7 +54,7 @@ public class WeatherApp {
                     System.out.print("Enter weather conditions: ");
                     weatherConditions = scanner.next();
 
-                    // Use FahrenheitDecorator to ensure Fahrenheit conversion
+                    // Use FahrenheitDecorator to fahrenheit conversion
                     IWeatherNotifier weatherNotifier = new FahrenheitDecorator(baseWeatherNotifier, new FahrenheitConversionStrategy());
                     weatherNotifier.sendNotification(cityName, temperature, weatherConditions);
                     break;
@@ -71,11 +69,11 @@ public class WeatherApp {
                     break;
 
                 case 4:
-                    System.out.println("Exiting Weather App. Thank you!");
+                    System.out.println("Exiting Weather App.");
                     break;
 
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice.");
             }
 
         } while (choice != 4);

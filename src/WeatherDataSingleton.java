@@ -2,7 +2,6 @@
 class WeatherDataSingleton {
     private static WeatherDataSingleton instance;
     private int temperatureCelsius;
-
     private WeatherDataSingleton() {
     }
 
@@ -12,11 +11,9 @@ class WeatherDataSingleton {
         }
         return instance;
     }
-
     public int getTemperatureCelsius() {
         return temperatureCelsius;
     }
-
     public void setTemperatureCelsius(int temperatureCelsius) {
         this.temperatureCelsius = temperatureCelsius;
     }
