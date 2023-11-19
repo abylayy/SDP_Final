@@ -56,7 +56,7 @@ The Factory pattern is used to create instances of the `WeatherNotifier` interfa
 
 The `WeatherObserver` interface defines the contract for objects that need to be notified about weather updates. It has a method `update(String cityName, int temperatureCelsius, String weatherConditions)`.
 
-```
+```java
 interface IWeatherObserver {
     void update(String cityName, int temperatureCelsius, String weatherConditions);
 }
@@ -66,7 +66,7 @@ interface IWeatherObserver {
 
 The `WeatherNotifier` interface defines the contract for classes responsible for sending weather notifications. It has a method `sendNotification(String cityName, int temperatureCelsius, String weatherConditions)`.
 
-```
+```java
 interface IWeatherNotifier {
     void sendNotification(String cityName, int temperatureCelsius, String weatherConditions);
 }
@@ -76,7 +76,7 @@ interface IWeatherNotifier {
 
 The `BaseWeatherNotifier` class is a concrete implementation of the `WeatherNotifier` interface, providing basic notification functionality.
 
-```
+```java
 class BaseWeatherNotifier implements IWeatherNotifier {
     @Override
     public void sendNotification(String cityName, int temperatureCelsius, String weatherConditions) {
@@ -90,7 +90,7 @@ class BaseWeatherNotifier implements IWeatherNotifier {
 
 The `CelsiusToFahrenheitAdapter` class adapts the `WeatherObserver` interface to handle different update parameters. It converts Celsius to Fahrenheit and then calls the `update` method.
 
-```
+```java
 class CelsiusToFahrenheitAdapter implements IWeatherObserver {
     private IWeatherObserver adaptee;
 
@@ -114,7 +114,7 @@ class CelsiusToFahrenheitAdapter implements IWeatherObserver {
 
 The `FahrenheitConversionStrategy` class is a concrete implementation of the `TemperatureConversionStrategy` interface, providing a strategy for converting temperatures to Fahrenheit.
 
-```
+```java
 class FahrenheitConversionStrategy implements ITemperatureConversionStrategy {
     @Override
     public int convertTemperature(int temperatureCelsius) {
@@ -127,7 +127,7 @@ class FahrenheitConversionStrategy implements ITemperatureConversionStrategy {
 
 The `WeatherDataSingleton` class ensures a single instance for storing and accessing weather data. It is responsible for holding the current temperature in Celsius.
 
-```
+```java
 class WeatherDataSingleton {
     private static WeatherDataSingleton instance;
     private int temperatureCelsius;
@@ -153,7 +153,7 @@ class WeatherDataSingleton {
 
 The `WeatherStation` class acts as the subject in the Observer pattern. It manages a list of observers (`WeatherObserver` instances) and notifies them about weather updates. It has methods for updating weather and sending notifications.
 
-```
+```java
 import java.util.ArrayList;
 import java.util.List;
 
@@ -182,7 +182,7 @@ class WeatherStation {
 
 The `CelsiusConversionStrategy` class is a concrete implementation of the `TemperatureConversionStrategy` interface, providing a strategy for converting temperatures to Celsius.
 
-```
+```java
 class CelsiusConversionStrategy implements ITemperatureConversionStrategy {
     @Override
     public int convertTemperature(int temperatureCelsius) {
@@ -195,7 +195,7 @@ class CelsiusConversionStrategy implements ITemperatureConversionStrategy {
 
 The `WeatherApp` class contains the main method and implements the console application. It handles user input, updates weather, and sends notifications based on user choices.
 
-```
+```java
 import java.util.Scanner;
 
 public class WeatherApp {
