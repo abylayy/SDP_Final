@@ -3,24 +3,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 class WeatherStation {
-    private List<WeatherObserver> observers = new ArrayList<>();
+    private List<IWeatherObserver> observers = new ArrayList<>();
 
-    public void addObserver(WeatherObserver observer) {
+    public void addObserver(IWeatherObserver observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(WeatherObserver observer) {
+    public void removeObserver(IWeatherObserver observer) {
         observers.remove(observer);
     }
 
     public void updateWeather(String cityName, int temperatureCelsius, String weatherConditions) {
-        for (WeatherObserver observer : observers) {
+        for (IWeatherObserver observer : observers) {
             observer.update(cityName, temperatureCelsius, weatherConditions);
         }
     }
 
     public void sendNotifications(String cityName, int temperatureCelsius, String weatherConditions) {
-        for (WeatherObserver observer : observers) {
+        for (IWeatherObserver observer : observers) {
             observer.update(cityName, temperatureCelsius, weatherConditions);
         }
     }

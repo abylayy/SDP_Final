@@ -1,4 +1,4 @@
 // Observer Pattern
-interface WeatherObserver {
+interface IWeatherObserver {
     void update(String cityName, int temperatureCelsius, String weatherConditions);
 }

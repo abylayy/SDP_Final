@@ -1,8 +1,8 @@
 // Factory Pattern
 class WeatherNotifierFactory {
-    public static WeatherNotifier createWeatherNotifier() {
-        WeatherNotifier baseWeatherNotifier = new BaseWeatherNotifier();
-        TemperatureConversionStrategy conversionStrategy = new CelsiusConversionStrategy();
+    public static IWeatherNotifier createWeatherNotifier() {
+        IWeatherNotifier baseWeatherNotifier = new BaseWeatherNotifier();
+        ITemperatureConversionStrategy conversionStrategy = new CelsiusConversionStrategy();
         return new FahrenheitDecorator(baseWeatherNotifier, conversionStrategy);
     }
 }

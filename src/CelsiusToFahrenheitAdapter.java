@@ -1,8 +1,8 @@
 // Adapter Pattern
-class CelsiusToFahrenheitAdapter implements WeatherObserver {
-    private WeatherObserver adaptee;
+class CelsiusToFahrenheitAdapter implements IWeatherObserver {
+    private IWeatherObserver adaptee;
 
-    public CelsiusToFahrenheitAdapter(WeatherObserver adaptee) {
+    public CelsiusToFahrenheitAdapter(IWeatherObserver adaptee) {
         this.adaptee = adaptee;
     }
 

@@ -6,18 +6,18 @@ public class WeatherApp {
         WeatherStation weatherStation = new WeatherStation();
 
         // Observer Pattern
-        WeatherObserver consoleObserver = (cityName, temperature, weatherConditions) -> {
+        IWeatherObserver consoleObserver = (cityName, temperature, weatherConditions) -> {
             System.out.println("Current weather in " + cityName +
                     ": Temperature (Celsius): " + temperature + ", Conditions: " + weatherConditions);
         };
 
-        WeatherObserver notificationObserver = (cityName, temperature, weatherConditions) -> {
-            WeatherNotifier weatherNotifier = WeatherNotifierFactory.createWeatherNotifier();
+        IWeatherObserver notificationObserver = (cityName, temperature, weatherConditions) -> {
+            IWeatherNotifier weatherNotifier = WeatherNotifierFactory.createWeatherNotifier();
             weatherNotifier.sendNotification(cityName, temperature, weatherConditions);
         };
 
-        WeatherNotifier baseWeatherNotifier = new BaseWeatherNotifier();
-        WeatherNotifier fahrenheitDecorator = new FahrenheitDecorator(baseWeatherNotifier, new FahrenheitConversionStrategy());
+        IWeatherNotifier baseWeatherNotifier = new BaseWeatherNotifier();
+        IWeatherNotifier fahrenheitDecorator = new FahrenheitDecorator(baseWeatherNotifier, new FahrenheitConversionStrategy());
 
         weatherStation.addObserver(new CelsiusToFahrenheitAdapter(consoleObserver));
         weatherStation.addObserver(new CelsiusToFahrenheitAdapter(notificationObserver));
@@ -57,7 +57,7 @@ public class WeatherApp {
                     weatherConditions = scanner.next();
 
                     // Use FahrenheitDecorator to ensure Fahrenheit conversion
-                    WeatherNotifier weatherNotifier = new FahrenheitDecorator(baseWeatherNotifier, new FahrenheitConversionStrategy());
+                    IWeatherNotifier weatherNotifier = new FahrenheitDecorator(baseWeatherNotifier, new FahrenheitConversionStrategy());
                     weatherNotifier.sendNotification(cityName, temperature, weatherConditions);
                     break;
 
@@ -65,7 +65,7 @@ public class WeatherApp {
                 case 3:
                     System.out.print("Enter the temperature in Celsius: ");
                     int celsiusTemperature = scanner.nextInt();
-                    TemperatureConversionStrategy conversionStrategy = new FahrenheitConversionStrategy();
+                    ITemperatureConversionStrategy conversionStrategy = new FahrenheitConversionStrategy();
                     int convertedTemperature = conversionStrategy.convertTemperature(celsiusTemperature);
                     System.out.println("Temperature in Fahrenheit: " + convertedTemperature);
                     break;

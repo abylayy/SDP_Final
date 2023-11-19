@@ -1,8 +1,8 @@
 // decorator
 class FahrenheitDecorator extends BaseWeatherDecorator {
-    private TemperatureConversionStrategy strategy;
+    private ITemperatureConversionStrategy strategy;
 
-    public FahrenheitDecorator(WeatherNotifier weatherNotifier, TemperatureConversionStrategy strategy) {
+    public FahrenheitDecorator(IWeatherNotifier weatherNotifier, ITemperatureConversionStrategy strategy) {
         super(weatherNotifier);
         this.strategy = strategy;
     }

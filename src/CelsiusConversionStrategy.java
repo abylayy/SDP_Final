@@ -1,5 +1,5 @@
 // strategy
-class CelsiusConversionStrategy implements TemperatureConversionStrategy {
+class CelsiusConversionStrategy implements ITemperatureConversionStrategy {
     @Override
     public int convertTemperature(int temperatureCelsius) {
         return temperatureCelsius;

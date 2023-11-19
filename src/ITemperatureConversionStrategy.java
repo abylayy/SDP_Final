@@ -1,4 +1,4 @@
 // Strategy Pattern
-interface TemperatureConversionStrategy {
+interface ITemperatureConversionStrategy {
     int convertTemperature(int temperatureCelsius);
 }

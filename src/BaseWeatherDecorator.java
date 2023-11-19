@@ -1,8 +1,8 @@
 // Base Decorator
-public abstract class BaseWeatherDecorator implements WeatherNotifier {
-    protected WeatherNotifier weatherNotifier;
+public abstract class BaseWeatherDecorator implements IWeatherNotifier {
+    protected IWeatherNotifier weatherNotifier;
 
-    public BaseWeatherDecorator(WeatherNotifier weatherNotifier) {
+    public BaseWeatherDecorator(IWeatherNotifier weatherNotifier) {
         this.weatherNotifier = weatherNotifier;
     }
 
