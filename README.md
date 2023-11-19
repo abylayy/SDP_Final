@@ -71,7 +71,7 @@ The `WeatherApp` class contains the main method and implements the console appli
 ## Authors
 
 - Amandykov Abylay
-- Issenbay Merey
+- Isenbay Merey
 - Yerezhepbayev Azamat
 
 ## UML Diagram
